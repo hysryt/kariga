@@ -1,6 +1,6 @@
 {
   "name": "@hysryt/kariga",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "仮の画像を生成するやつ",
   "main": "index.js",
   "bin": "bin/kariga.js",
@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "canvas": "^1.6.10",
+    "jimp": "^0.2.28",
     "yargs": "^11.0.0"
   },
   "repository": "github:hysryt/kariga"

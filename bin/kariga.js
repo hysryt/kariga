@@ -2,6 +2,8 @@
 
 const Image = require('./Image.js');
 
+class KarigaError extends Error {}
+
 (function() {
 
   const yargs = require("yargs")
@@ -19,6 +21,7 @@ const Image = require('./Image.js');
       alias: 'color',
       describe: '塗りつぶし色(000000)',
       default: '000000',
+      type: 'string',
     })
     .option('o', {
       alias: 'output',
@@ -41,16 +44,29 @@ const Image = require('./Image.js');
       return;
     }
 
-    // bashの場合エスケープしないと#が入力できないので、
-    // #なしでの入力も受け取る
-    let color = argv.color;
-    if (!color.startsWith('#')) {
-      color = '#' + color;
+    try {
+      if (argv.color.length != 6 && argv.color.length != 8) {
+        throw new KarigaError('error: -c オプションには6桁または8桁の16進数を指定してください。')
+      }
+
+      // 色を指定する16進数文字列を数値に変換
+      // 指定が16進数で6桁の場合はアルファ値を0xffとする
+      let color = parseInt(argv.color, 16);
+      if (argv.color.length == 6) {
+        color = (color << 8) + 0xff;
+      }
+
+      // 画像の生成、保存
+      const image = new Image(argv.width, argv.height, color);
+      await image.save(argv.output);
+
+    } catch(e) {
+      if (e instanceof KarigaError) {
+        console.log(e.message);
+        
+      } else {
+        throw e;
+      }
     }
-
-    // 画像の生成、保存
-    const image = new Image(argv.width, argv.height, color);
-    await image.save(argv.output);
-
   });
 })();

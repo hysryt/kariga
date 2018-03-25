@@ -1,10 +1,5 @@
-
-# 必要なライブラリのインストール
-
-```
-brew install pkg-config cairo pango libpng jpeg giflib
-```
-
+Kariga
+===
 
 # インストール
 ```
@@ -23,5 +18,5 @@ $ kariga -w 横幅 -h 高さ [options...]
 |-|-|
 |`-w`,`--width`|画像の横幅(px)|
 |`-h`,`--height`|画像の高さ(px)|
-|`-c`,`--color`|塗りつぶし色<br>16進のRGB指定で、先頭の#はなくてもいい<br>bashで#を入力する時はエスケープが必要なので注意<br>デフォルトは`000000`|
+|`-c`,`--color`|塗りつぶし色<br>6桁または8桁の16進のRGB指定。<br>8桁の場合、最後の2桁がアルファ値とする<br>6桁の場合、アルファ値は`0xff`<br>デフォルトは`000000ff`|
 |`-o`,`--output`|画像の保存パス<br>デフォルトは`output.png`

@@ -1,6 +1,6 @@
 {
   "name": "@hysryt/kariga",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "仮の画像を生成するやつ",
   "main": "index.js",
   "bin": "bin/kariga.js",

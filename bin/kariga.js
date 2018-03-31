@@ -20,13 +20,18 @@ class KarigaError extends Error {}
     .option('c', {
       alias: 'color',
       describe: '塗りつぶし色(000000)',
-      default: '000000',
+      default: 'ffffff7f',
       type: 'string',
     })
     .option('o', {
       alias: 'output',
       describe: '保存先ファイルパス',
       default: 'output.png',
+    })
+    .option('sizetext', {
+      type: 'boolean',
+      describe: 'サイズテキストの有効化',
+      default: true,
     });
 
   yargs.parse(process.argv.slice(2), async (err, argv, output) => {
@@ -57,7 +62,7 @@ class KarigaError extends Error {}
       }
 
       // 画像の生成、保存
-      const image = new Image(argv.width, argv.height, color);
+      const image = new Image(argv.width, argv.height, color, argv.sizetext);
       await image.save(argv.output);
 
     } catch(e) {

@@ -5,6 +5,7 @@ const Image = require('./Image.js');
 class KarigaError extends Error {}
 
 (function() {
+  const DEFAULT_ALPHA = "ff";
 
   const yargs = require("yargs")
     .option('w', {
@@ -50,16 +51,8 @@ class KarigaError extends Error {}
     }
 
     try {
-      if (argv.color.length != 6 && argv.color.length != 8) {
-        throw new KarigaError('error: -c オプションには6桁または8桁の16進数を指定してください。')
-      }
-
-      // 色を指定する16進数文字列を数値に変換
-      // 指定が16進数で6桁の場合はアルファ値を0xffとする
-      let color = parseInt(argv.color, 16);
-      if (argv.color.length == 6) {
-        color = (color << 8) + 0xff;
-      }
+      // 入力値の色情報を正規化
+      let color = normalizeColor(argv.color);
 
       // 画像の生成、保存
       const image = new Image(argv.width, argv.height, color, argv.sizetext);
@@ -74,4 +67,23 @@ class KarigaError extends Error {}
       }
     }
   });
+
+  /**
+   * 色情報を正規化
+   * @param {string} color - 6桁(RGB)か8桁(RGBA)の16進数の色情報（文字列）
+   * @return {number} RGBAの色情報（数値型）
+   */
+  function normalizeColor(color) {
+    if (!(/^[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$/.test(color))) {
+      throw new KarigaError('error: -c オプションには6桁または8桁の16進数を指定してください。')
+    }
+
+    // 6桁の場合はアルファ値を追加
+    let normalizedColor = color;
+    if (normalizedColor.length == 6) {
+      normalizedColor += DEFAULT_ALPHA;
+    }
+
+    return parseInt(normalizedColor, 16);
+  }
 })();
